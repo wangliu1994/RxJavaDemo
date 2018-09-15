@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import rx.Observable;
 import rx.Observer;
@@ -409,9 +410,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doObServer11(){
-        ArrayList<Integer> integers = (ArrayList<Integer>) Arrays.asList(1,22, 279, 73, 4, 5454);
+        final ArrayList<Integer> integers = (ArrayList<Integer>) Arrays.asList(1,22, 279, 73, 4, 5454);
         Observable
-                .from(integers)
+                .create(new Observable.OnSubscribe<ArrayList<Integer>>() {
+                    @Override
+                    public void call(Subscriber<? super ArrayList<Integer>> subscriber) {
+                        Collections.sort(integers);
+                        subscriber.onNext(integers);
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(new Action0() {
                     @Override
@@ -421,9 +428,9 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .subscribeOn(AndroidSchedulers.mainThread())//指定doOnSubscribe在主线程
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Integer>() {
+                .subscribe(new Action1<ArrayList<Integer>>() {
                     @Override
-                    public void call(Integer integer) {
+                    public void call(ArrayList<Integer> integers) {
 
                     }
                 });
