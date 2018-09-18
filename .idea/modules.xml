@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RxJavaDemo.iml" filepath="$PROJECT_DIR$/RxJavaDemo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\Code\Own_In_GitHab\RxJavaDemo\rxjava2\myapplication.iml" filepath="D:\Code\Own_In_GitHab\RxJavaDemo\rxjava2\myapplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rxjava1/rxjava1.iml" filepath="$PROJECT_DIR$/rxjava1/rxjava1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rxjava2/rxjava2.iml" filepath="$PROJECT_DIR$/rxjava2/rxjava2.iml" />
     </modules>
   </component>
 </project>
