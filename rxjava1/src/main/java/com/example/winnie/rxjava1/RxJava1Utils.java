@@ -305,7 +305,7 @@ public class RxJava1Utils {
                 .subscribe(new Action1<File>() {
                     @Override
                     public void call(File file) {
-                        //TODO 处理一个File的内容，现在不许要再for循环遍历文件夹的子文件
+                        //TODO 处理一个File的内容，现在不需要再for循环遍历文件夹的子文件
                     }
                 });
     }

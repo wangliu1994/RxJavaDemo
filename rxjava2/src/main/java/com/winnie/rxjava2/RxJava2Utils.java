@@ -17,6 +17,7 @@ import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableOperator;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -313,4 +314,126 @@ public class RxJava2Utils {
                 })
                 .subscribe(consumer);
     }
+
+    /**
+     * 使用 just 创建事件序列
+     * just(T...): 将传入的参数依次发送出来
+     */
+    public static void doObserver3() {
+        // 将会依次调用：
+        // onNext("Hello");
+        // onNext("I am winnie");
+        // onNext("what is your name");
+        // onCompleted();
+        Observable
+                .just("hello, ", "I am winnie", "what is your name")
+                .subscribe(new Observer<String>() {
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        System.out.println(s);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println(e.toString());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        System.out.println("complete");
+                    }
+
+                });
+
+    }
+
+    /**
+     * 使用 from 创建事件序列
+     * from(T[]) / from(Iterable<? extends T>) : 将传入的数组或 Iterable 拆分成具体对象后，依次发送出来
+     */
+    public static void doObserver4() {
+        // 将会依次调用：
+        // onNext("Hello");
+        // onNext("I am winnie");
+        // onNext("what is your name");
+        // onCompleted();
+        String[] datas = new String[]{"hello, ", "I am winnie", "what is your name"};
+        Observable
+                .fromArray(datas)
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        System.out.println(s);
+                    }
+
+
+                    @Override
+                    public void onComplete() {
+                        System.out.println("complete");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println(e.toString());
+                    }
+
+                });
+
+    }
+
+    /**
+     * lift转换方法, 主要适合Retrofit + RxJava的网络请求
+     * 在 Observable 执行了 lift(Operator) 方法之后，
+     * 会返回一个新的 Observable，这个新的 Observable 会像一个代理一样，
+     * 负责接收原始的 Observable 发出的事件，并在处理后发送给 Subscriber。
+     */
+    public static void doObserver9() {
+        Integer[] fileNames = new Integer[]{1, 23, 144};
+        Observable
+                .fromArray(fileNames)
+                .lift(new ObservableOperator<String, Integer>() {
+                    @Override
+                    public Observer<? super Integer> apply(final Observer<? super String> observer) throws Exception {
+                        return new Observer<Integer>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                observer.onSubscribe(d);
+                            }
+
+                            @Override
+                            public void onNext(Integer integer) {
+                                observer.onNext(String.valueOf(integer));
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                observer.onError(e);
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                observer.onComplete();
+                            }
+                        };
+                    }
+                })
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        System.out.println(s);
+                    }
+                });
+    }
+
 }
