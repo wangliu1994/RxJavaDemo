@@ -30,8 +30,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class RxJava2Utils {
-
-    private static void doFun1() {
+    public static void doFun1() {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
@@ -47,6 +46,7 @@ public class RxJava2Utils {
             @Override
             public void onSubscribe(Disposable d) {
                 mDisposable = d;
+                Log.d(TAG, "subscribe");
             }
 
             @Override
@@ -56,16 +56,17 @@ public class RxJava2Utils {
                     //mDisposable可以切断操作，不再接收上游事件
                     mDisposable.dispose();
                 }
+                Log.d(TAG, "" + integer);
             }
 
             @Override
             public void onError(Throwable e) {
-
+                Log.d(TAG, "error");
             }
 
             @Override
             public void onComplete() {
-
+                Log.d(TAG, "complete");
             }
         });
     }
@@ -274,5 +275,42 @@ public class RxJava2Utils {
 
                     }
                 });
+    }
+
+    public static void doFun10() {
+        Observable<Integer> observable = Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                Log.d(TAG, "Observable thread is : " + Thread.currentThread().getName());
+                Log.d(TAG, "emit 1");
+                emitter.onNext(1);
+            }
+        });
+
+        Consumer<Integer> consumer = new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) throws Exception {
+                Log.d(TAG, "Observer thread is :" + Thread.currentThread().getName());
+                Log.d(TAG, "onNext: " + integer);
+            }
+        };
+
+        observable.subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        Log.d(TAG, "After observeOn(mainThread), current thread is: " + Thread.currentThread().getName());
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .doOnNext(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        Log.d(TAG, "After observeOn(io), current thread is : " + Thread.currentThread().getName());
+                    }
+                })
+                .subscribe(consumer);
     }
 }
