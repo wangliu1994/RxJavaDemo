@@ -34,6 +34,9 @@ import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * @author winnie
+ */
 public class MainActivity extends AppCompatActivity {
 
     private Subscription mSubscription;
