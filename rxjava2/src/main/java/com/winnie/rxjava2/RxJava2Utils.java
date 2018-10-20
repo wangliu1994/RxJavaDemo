@@ -1,5 +1,6 @@
 package com.winnie.rxjava2;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import com.rx2androidnetworking.Rx2AndroidNetworking;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.BackpressureStrategy;
@@ -23,6 +25,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -278,6 +281,7 @@ public class RxJava2Utils {
                 });
     }
 
+    @SuppressLint("CheckResult")
     public static void doFun10() {
         Observable<Integer> observable = Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
@@ -296,7 +300,8 @@ public class RxJava2Utils {
             }
         };
 
-        observable.subscribeOn(Schedulers.newThread())
+        observable
+                .subscribeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Consumer<Integer>() {
@@ -327,11 +332,16 @@ public class RxJava2Utils {
         // onCompleted();
         Observable
                 .just("hello, ", "I am winnie", "what is your name")
+                .filter(new Predicate<String>() {
+                    @Override
+                    public boolean test(String s) throws Exception {
+                        return s.length() > 3;
+                    }
+                })
                 .subscribe(new Observer<String>() {
 
                     @Override
                     public void onSubscribe(Disposable d) {
-
                     }
 
                     @Override
@@ -398,6 +408,7 @@ public class RxJava2Utils {
      * 会返回一个新的 Observable，这个新的 Observable 会像一个代理一样，
      * 负责接收原始的 Observable 发出的事件，并在处理后发送给 Subscriber。
      */
+    @SuppressLint("CheckResult")
     public static void doObserver9() {
         Integer[] fileNames = new Integer[]{1, 23, 144};
         Observable

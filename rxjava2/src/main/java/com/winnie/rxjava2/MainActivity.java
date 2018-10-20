@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
 
                         try {
                             Thread.sleep(1000);
-                            mSubscription.request(1);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -129,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onNext(String string) {
                         mTextView.setText(string);
+                        mSubscription.request(1);
                     }
 
                     @Override
