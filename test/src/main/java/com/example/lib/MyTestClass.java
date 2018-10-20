@@ -4,7 +4,6 @@ import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 
 import io.reactivex.BackpressureStrategy;
@@ -44,7 +43,6 @@ public class MyTestClass {
                                     }
                                 }
                                 emitter.onNext(str);
-                                //System.out.println(str);
                             }
 
                             br.close();
