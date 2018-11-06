@@ -1,4 +1,4 @@
-package com.example.winnie.rxjava1;
+package com.winnie.tools.rxjava1;
 
 import org.junit.Test;
 

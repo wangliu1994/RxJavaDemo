@@ -1,4 +1,4 @@
-package com.winnie.rxjava2;
+package com.winnie.tools.rxjava2;
 
 import android.Manifest;
 import android.content.pm.PackageManager;

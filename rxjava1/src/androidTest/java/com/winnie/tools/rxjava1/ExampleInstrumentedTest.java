@@ -1,4 +1,4 @@
-package com.example.winnie.rxjava1;
+package com.winnie.tools.rxjava1;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
